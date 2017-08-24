@@ -1,3 +1,8 @@
-.DS_Store
+*
+!*.*
+!*/
+!LICENSE
+!.gitignore
+!.travis.yml
 hosts
 wpa_supplicant.conf
