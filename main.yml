@@ -1,0 +1,48 @@
+items:
+  - name: 'Configure WIFI'
+    copy:
+      src: ./conf/wpa_supplicant.conf
+      dest: /etc/wpa_supplicant/wpa_supplicant.conf
+      mode: 0600
+
+  - name: 'Install packages using apt'
+    apt:
+      packages:
+        - git
+        - openssl
+        - build-essential 
+        - guvcview
+        - tightvncserver
+      before_update: True
+
+  - name: 'Configure dhcpd'
+    copy:
+      src: ./conf/dhcpcd.conf
+      dest: /etc/dhcpcd.conf
+
+  - name: 'Configure autorun_date'
+    copy:
+      src: ./init.d/autorun_date
+      dest: /etc/init.d/autorun_date
+      mode: 0755
+
+  - name: 'Register autorun_date to update-rc.d'
+    command: update-rc.d /etc/init.d/autorun_date defaults
+
+  - name: 'Configure vncboot'
+    copy:
+      src: ./init.d/vncboot
+      dest: /etc/init.d/vncboot
+      mode: 0755
+
+  - name: 'Register vncboot to update-rc.d'
+    command: update-rc.d /etc/init.d/vncboot defaults
+
+  - name: 'Download rclone'
+    get_url:
+      url: "https://downloads.rclone.org/rclone-v1.37-linux-arm.zip"
+      dest: "/home/pi/"
+
+  - name: 'Install rclone'
+    command: unzip /home/pi/rclone-v1.37-linux-arm.zip && 
+            install -o root -g root -m 0755 -t /home/pi/rclone-v1.37-linux-arm/rclone /usr/bin/rclone
