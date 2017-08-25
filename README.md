@@ -69,7 +69,7 @@ You can use these keys for the task.
     
     apt, copy, get_url, command
 
-### `apt`
+### ・`apt`
 `apt` have `packages` and `before_update`.
 `packages` have value to install packages.  
 If `before_update` is `True`, It update repositories before do relate apt task.
@@ -85,7 +85,7 @@ If `before_update` is `True`, It update repositories before do relate apt task.
     before_update: True
 ```
 
-### `copy`
+### ・`copy`
 `copy` have `src` and `dest`, `mode`.
 Copy the compiled file together to the specified path.
 - `src`: You specify the path as the base of `files` directory.  
@@ -98,7 +98,7 @@ Copy the compiled file together to the specified path.
     dest: /etc/init.d/autorun_date
     mode: 0755
 ```
-### `get_url`
+### ・`get_url`
 `get_url` have `url` and `dest`.  
 You can download file if you use this key.
 - `url`: Specify the URL.
@@ -109,7 +109,7 @@ You can download file if you use this key.
      url: "https://downloads.rclone.org/rclone-v1.37-linux-arm.zip"
      dest: "/home/pi/"
 ```
-### `command`
+### ・`command`
 You can run command. like this.
 ```yaml
 - name: 'run command'
