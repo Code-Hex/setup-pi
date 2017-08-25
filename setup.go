@@ -8,13 +8,19 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/Code-Hex/exit"
-	"github.com/k0kubun/pp"
+	"github.com/pkg/errors"
 )
 
 //go:generate go-bindata -pkg setup -o bindata.go ./files/...
+const (
+	version = "0.0.1"
+	msg     = name + " v" + version + ", Setup tool for raspberry pi"
+	name    = "setup"
+)
 
 // Setup context
 type Setup struct {
+	Options
 	Files  []string
 	Recipe *Recipe
 }
@@ -31,15 +37,45 @@ func New() *Setup {
 func (s *Setup) Run() int {
 	if e := s.run(); e != nil {
 		exitCode, err := UnwrapErrors(e)
-		fmt.Fprintf(os.Stderr, "Error:\n  %v\n", err)
+		if s.StackTrace {
+			fmt.Fprintf(os.Stderr, "Error:\n  %+v\n", e)
+		} else {
+			fmt.Fprintf(os.Stderr, "Error:\n  %v\n", err)
+		}
 		return exitCode
 	}
 	return 0
 }
 
 func (s *Setup) run() error {
-	pp.Println(s.Files)
-	f, err := os.Open("main.yml")
+	_, err := parseOptions(&s.Options, os.Args[1:])
+	if err != nil {
+		return errors.Wrap(err, "Failed to parse command line args")
+	}
+
+	if err := s.parseRecipe(); err != nil {
+		return errors.Wrap(err, "Failed to parse recipe")
+	}
+
+	return nil
+}
+
+func parseOptions(opts *Options, argv []string) ([]string, error) {
+	o, err := opts.parse(argv)
+	if err != nil {
+		return nil, exit.MakeDataErr(err)
+	}
+	if opts.Help {
+		return nil, exit.MakeUsage(errors.New(string(opts.usage())))
+	}
+	if opts.Version {
+		return nil, exit.MakeUsage(errors.New(msg))
+	}
+	return o, nil
+}
+
+func (s *Setup) parseRecipe() error {
+	f, err := os.Open(s.Filename)
 	if err != nil {
 		return exit.MakeOSFile(err)
 	}
@@ -53,8 +89,5 @@ func (s *Setup) run() error {
 	if err := yaml.Unmarshal(b, s.Recipe); err != nil {
 		return exit.MakeDataErr(err)
 	}
-
-	pp.Println(s.Recipe)
-
 	return nil
 }
