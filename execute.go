@@ -31,18 +31,28 @@ func (s *Setup) execute() error {
 
 func (s *Setup) invoke(item *Item) error {
 	if item.Apt != nil {
-		return s.invokeApt(item)
+		if err := s.invokeApt(item); err != nil {
+			return errors.Wrap(err, "Failed to invokeApt")
+		}
 	}
 
 	if item.Copy != nil {
-		return s.invokeCopy(item)
+		if err := s.invokeCopy(item); err != nil {
+			return errors.Wrap(err, "Failed to invokeCopy")
+		}
 	}
 
 	if item.GetURL != nil {
-		return s.invokeGetURL(item)
+		if err := s.invokeGetURL(item); err != nil {
+			return errors.Wrap(err, "Failed to invokeGetURL")
+		}
 	}
 
-	return s.invokeCommand(item)
+	if err := s.invokeCommand(item); err != nil {
+		return errors.Wrap(err, "Failed to invokeCommand")
+	}
+
+	return nil
 }
 
 func (s *Setup) invokeApt(item *Item) error {
