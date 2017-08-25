@@ -21,15 +21,18 @@ const (
 // Setup context
 type Setup struct {
 	Options
-	Files  []string
 	Recipe *Recipe
+	Files  []string
+	Env    []string
 }
 
 // New is construct
 func New() *Setup {
+
 	return &Setup{
-		Files:  AssetNames(),
 		Recipe: new(Recipe),
+		Files:  AssetNames(),
+		Env:    os.Environ(),
 	}
 }
 
@@ -48,15 +51,19 @@ func (s *Setup) Run() int {
 }
 
 func (s *Setup) run() error {
+	if os.Geteuid() > 0 {
+		return errors.New("You must run this program as a superuser")
+	}
 	_, err := parseOptions(&s.Options, os.Args[1:])
 	if err != nil {
 		return errors.Wrap(err, "Failed to parse command line args")
 	}
-
 	if err := s.parseRecipe(); err != nil {
 		return errors.Wrap(err, "Failed to parse recipe")
 	}
-
+	if err := s.execute(); err != nil {
+		return errors.Wrap(err, "Failed to execute item")
+	}
 	return nil
 }
 
