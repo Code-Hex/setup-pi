@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/fatih/color"
+
 	"gopkg.in/yaml.v2"
 
 	"github.com/Code-Hex/exit"
@@ -24,15 +26,18 @@ type Setup struct {
 	Recipe *Recipe
 	Files  []string
 	Env    []string
+	Blue   *color.Color
+	Yellow *color.Color
 }
 
 // New is construct
 func New() *Setup {
-
 	return &Setup{
 		Recipe: new(Recipe),
 		Files:  AssetNames(),
 		Env:    os.Environ(),
+		Blue:   color.New(color.FgBlue),
+		Yellow: color.New(color.FgYellow),
 	}
 }
 

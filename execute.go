@@ -26,10 +26,12 @@ func (s *Setup) execute() error {
 			return errors.Wrapf(err, "Failed to invoke item[%d]: %s", idx, item.Name)
 		}
 	}
+	s.Blue.Println("This recipe is completed!!")
 	return nil
 }
 
 func (s *Setup) invoke(item *Item) error {
+	s.Yellow.Println(item.Name)
 	if item.Apt != nil {
 		if err := s.invokeApt(item); err != nil {
 			return errors.Wrap(err, "Failed to invokeApt")
