@@ -1,9 +1,0 @@
----
-user: pi
-
-__apt_install_packages:
-  - git
-  - openssl
-  - build-essential 
-  - guvcview
-  - tightvncserver
