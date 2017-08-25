@@ -1,4 +1,4 @@
-# ansible-pi
+# setup-pi
 
 ![](https://raw.github.com/motdotla/ansible-pi/master/ansible-pi.jpg)
 
