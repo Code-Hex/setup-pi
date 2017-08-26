@@ -4,5 +4,6 @@
 !LICENSE
 !.gitignore
 !.travis.yml
+!Makefile
 hosts
 wpa_supplicant.conf
