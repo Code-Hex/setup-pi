@@ -75,7 +75,7 @@ func (s *Setup) run() error {
 func parseOptions(opts *Options, argv []string) ([]string, error) {
 	o, err := opts.parse(argv)
 	if err != nil {
-		return nil, exit.MakeDataErr(err)
+		return nil, errors.Wrap(err, "invalid command line options")
 	}
 	if opts.Help {
 		return nil, exit.MakeUsage(errors.New(string(opts.usage())))
