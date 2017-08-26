@@ -23,6 +23,7 @@ type Copy struct {
 type Apt struct {
 	Packages     []string
 	BeforeUpdate bool `yaml:"before_update"`
+	IsUpgrade    bool `yaml:"is_upgrade"`
 }
 
 type GetURL struct {

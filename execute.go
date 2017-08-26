@@ -67,6 +67,14 @@ func (s *Setup) invokeApt(item *Item) error {
 		}
 	}
 
+	if apt.IsUpgrade {
+		cmd := exec.Command("apt", "upgrade", "-y")
+		cmd.Env = s.Env
+		if err := cmd.Run(); err != nil {
+			return exit.MakeOSErr(err)
+		}
+	}
+
 	args := append([]string{"install", "-y"}, item.Packages...)
 	cmd := exec.Command("apt", args...)
 	cmd.Env = s.Env

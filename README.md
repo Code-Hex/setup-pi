@@ -49,6 +49,7 @@ items:
         - guvcview
         - tightvncserver
       before_update: True
+      is_upgrade: True
 
   - name: 'Configure dhcpd'
     copy:
@@ -72,7 +73,9 @@ You can use these keys for the task.
 ### ・`apt`
 `apt` have `packages` and `before_update`.
 `packages` have value to install packages.  
-If `before_update` is `True`, It update repositories before do relate apt task.
+- `before_update`: Bool. It update repositories before do relate apt task.
+- `is_upgrade`: Bool. If you have the upgrade list, these will upgrade.
+
 ```yaml
 - name: 'install using apt'
   apt:
@@ -82,7 +85,8 @@ If `before_update` is `True`, It update repositories before do relate apt task.
       - build-essential 
       - guvcview
       - tightvncserver
-    before_update: True
+    before_update: True # bool
+    is_upgrade: True    # bool
 ```
 
 ### ・`copy`
